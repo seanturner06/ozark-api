@@ -1,0 +1,35 @@
+{
+  "name": "ozark-api",
+  "version": "1.0.0",
+  "description": "GraphQL API for TV show data using Apollo Server, Prisma, and PostgreSQL",
+  "main": ".dist/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node .dist/index.js",
+    "db:migrate": "prisma migrate",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.9.0",
+    "apollo-server-express": "^3.13.0",
+    "express": "^4.21.2",
+    "graphql": "^16.11.0",
+    "prisma": "^6.9.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/graphql": "^14.2.3",
+    "@types/node": "^24.0.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

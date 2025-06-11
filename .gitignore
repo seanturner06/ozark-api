@@ -134,3 +134,26 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+/src/generated/prisma
+
+.env
+node_modules/
+.dist
+*.log
+npm-debug.log*
+
+# macOS specific files
+.DS_Store?
+.DS_STORE
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
