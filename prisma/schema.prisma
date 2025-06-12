@@ -15,23 +15,68 @@ datasource db {
 }
 
 model Episode {
-  id            Int      @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   episodeNumber Int
   title         String
   imbdRating    Float?
-  viewerRatnig  Float?
+  viewerRating  Float?
   description   String?
   seasonId      Int
   airDate       DateTime
-  season        Season   @relation(fields: [seasonId], references: [id])
+  season        Season      @relation(fields: [seasonId], references: [id])
+  crimes        Crime[] // Implicit many-to-many relation with Crime
+  characters    Character[] // Implicit many-to-many relation with Character
+  quotes        Quote[] // One-to-many relation with Quote
 
   @@unique([seasonId, episodeNumber])
 }
 
 model Season {
-  id           Int       @id @default(autoincrement())
-  seasonNumber Int
-  imbdRating   Float?
+  id           Int         @id @default(autoincrement())
+  seasonNumber Int         @unique
+  imdbRating   Float?
   viewerRating Float?
-  episodes     Episode[]
+  airDate      DateTime
+  episodes     Episode[] // One-to-many relation with Episode
+  characters   Character[] // Implicit many-to-many relation with Character
+  crimes       Crime[] // Implicit many-to-many relation with Crime
+  quotes       Quote[] // One-to-many relation with Quote
+}
+
+model Character {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  imageUrl    String?
+  quotes      Quote[] // One-to-many relation with Quote
+  // Possibly will explicitly add a relation later
+  seasons     Season[] // Implicit many-to-many
+  crimes      Crime[] // Implicit many-to-many
+  episodes    Episode[] // Implicit many-to-many
+}
+
+model Crime {
+  id          Int         @id @default(autoincrement())
+  type        String
+  victim      String
+  description String?
+  severity    String?
+  seasons     Season[] // Implicit many-to-many 
+  episodes    Episode[] // Implicit many-to-many
+  characters  Character[] // Implicit many-to-many 
+
+  @@unique([type, victim]) // Prevents duplicate crimes with same name and description
+}
+
+model Quote {
+  id          Int       @id @default(autoincrement())
+  text        String
+  characterId Int
+  character   Character @relation(fields: [characterId], references: [id])
+  episodeId   Int
+  episode     Episode   @relation(fields: [episodeId], references: [id])
+  seasonId    Int
+  season      Season    @relation(fields: [seasonId], references: [id])
+
+  @@unique([text, characterId, episodeId]) // prevents same quote by same person in same episode
 }
