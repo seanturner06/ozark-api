@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,3 +14,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Episode {
+  id            Int      @id @default(autoincrement())
+  episodeNumber Int
+  title         String
+  imbdRating    Float?
+  viewerRatnig  Float?
+  description   String?
+  seasonId      Int
+  airDate       DateTime
+  season        Season   @relation(fields: [seasonId], references: [id])
+
+  @@unique([seasonId, episodeNumber])
+}
+
+model Season {
+  id           Int       @id @default(autoincrement())
+  seasonNumber Int
+  imbdRating   Float?
+  viewerRating Float?
+  episodes     Episode[]
+}
