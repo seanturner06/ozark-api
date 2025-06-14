@@ -1,13 +1,13 @@
 type Query {
-  episodes: [Episode!]!
+  episodes(filter: EpisodeFilter): [Episode!]!
   episode(id: ID!): Episode
-  characters: [Character!]!
+  characters(filter: CharacterFilter): [Character!]!
   character(id: ID!): Character
-  crimes: [Crime!]!
+  crimes(filter: CrimeFilter): [Crime!]!
   crime(id: ID!): Crime
-  seasons: [Season!]!
+  seasons(filter: SeasonFilter): [Season!]!
   season(id: ID!): Season
-  quotes: [Quote!]!
+  quotes(filter: QuoteFilter): [Quote!]!
   quote(id: ID!): Quote
 }
 
@@ -15,7 +15,7 @@ type Episode {
   id: ID!
   episodeNumber: Int!
   title: String!
-  imbdRating: Float
+  imdbRating: Float
   viewerRating: Float
   description: String
   seasonId: Int!
@@ -52,7 +52,7 @@ type Character {
 type Crime {
   id: ID!
   type: String!
-  victim: String
+  victim: String!
   description: String!
   severity: String!
   episodes: [Episode!]!
@@ -65,9 +65,51 @@ type Quote {
   id: ID!
   text: String!
   characterId: Int!
+  episodeId: Int!
+  seasonId: Int!
+  character: Character!
+  episode: Episode!
+  season: Season!
+}
+
+input EpisodeFilter {
+  seasonNumber: Int
+  episodeNumber: Int
+  hasDeaths: Boolean
+  imdbRating: Float
+  viewerRating: Float
+  characterAppearances: [String!]
+}
+
+input SeasonFilter {
+  seasonNumber: Int
+  imdbRating: Float
+  viewerRating: Float
+  airDate: DateTime
+}
+
+input CharacterFilter {
+  name: String
+  hasCrimes: Boolean
+  seasonAppearances: [Int!]
+  episodeAppearances: [Int!]
+  quotes: [String!]
+}
+
+input CrimeFilter {
+  type: String
+  victim: String
+  severity: String
+  episodeAppearances: [Int!]
+  seasonAppearances: [Int!]
+}
+
+input QuoteFilter {
+  characterId: Int
   episodeId: Int
   seasonId: Int
-  character: Character!
-  episode: Episode
-  season: Season
+  textContains: String
+  hasCharacter: Boolean
+  hasEpisode: Boolean
+  hasSeason: Boolean
 }
