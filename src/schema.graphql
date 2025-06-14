@@ -1,0 +1,12 @@
+type Query {
+  episodes: [Episode!]!
+  episode(id: ID!): Episode
+  characters: [Character!]!
+  character(id: ID!): Character
+  crimes: [Crime!]!
+  crime(id: ID!): Crime
+  seasons: [Season!]!
+  season(id: ID!): Season
+  quotes: [Quote!]!
+  quote(id: ID!): Quote
+}
