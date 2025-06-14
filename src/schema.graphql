@@ -25,3 +25,49 @@ type Episode {
   season: Season!
   quotes: [Quote!]!
 }
+
+type Season {
+  id: ID!
+  seasonNumber: Int!
+  imdbRating: Float
+  viewerRating: Float
+  airDate: DateTime
+  episodes: [Episode!]!
+  characters: [Character!]!
+  crimes: [Crime!]!
+  quotes: [Quote!]!
+}
+
+type Character {
+  id: ID!
+  name: String!
+  description: String
+  imageUrl: String
+  episodes: [Episode!]!
+  seasons: [Season!]!
+  crimes: [Crime!]!
+  quotes: [Quote!]!
+}
+
+type Crime {
+  id: ID!
+  type: String!
+  victim: String
+  description: String!
+  severity: String!
+  episodes: [Episode!]!
+  seasons: [Season!]!
+  characters: [Character!]!
+  quotes: [Quote!]!
+}
+
+type Quote {
+  id: ID!
+  text: String!
+  characterId: Int!
+  episodeId: Int
+  seasonId: Int
+  character: Character!
+  episode: Episode
+  season: Season
+}
