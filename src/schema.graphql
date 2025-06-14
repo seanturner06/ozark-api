@@ -10,3 +10,18 @@ type Query {
   quotes: [Quote!]!
   quote(id: ID!): Quote
 }
+
+type Episode {
+  id: ID!
+  episodeNumber: Int!
+  title: String!
+  imbdRating: Float
+  viewerRating: Float
+  description: String
+  seasonId: Int!
+  airDate: String
+  characters: [Character!]!
+  crimes: [Crime!]!
+  season: Season!
+  quotes: [Quote!]!
+}
