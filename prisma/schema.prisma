@@ -18,8 +18,9 @@ model Episode {
   id            Int         @id @default(autoincrement())
   episodeNumber Int
   title         String
-  imbdRating    Float?
+  imdbRating    Float?
   viewerRating  Float?
+  hasDeaths     Boolean
   description   String?
   seasonId      Int
   airDate       DateTime
@@ -32,15 +33,12 @@ model Episode {
 }
 
 model Season {
-  id           Int         @id @default(autoincrement())
-  seasonNumber Int         @unique
+  id           Int       @id @default(autoincrement())
+  seasonNumber Int       @unique
   imdbRating   Float?
   viewerRating Float?
   airDate      DateTime
   episodes     Episode[] // One-to-many relation with Episode
-  characters   Character[] // Implicit many-to-many relation with Character
-  crimes       Crime[] // Implicit many-to-many relation with Crime
-  quotes       Quote[] // One-to-many relation with Quote
 }
 
 model Character {
@@ -50,7 +48,6 @@ model Character {
   imageUrl    String?
   quotes      Quote[] // One-to-many relation with Quote
   // Possibly will explicitly add a relation later
-  seasons     Season[] // Implicit many-to-many
   crimes      Crime[] // Implicit many-to-many
   episodes    Episode[] // Implicit many-to-many
 }
@@ -61,7 +58,6 @@ model Crime {
   victim      String
   description String?
   severity    String?
-  seasons     Season[] // Implicit many-to-many 
   episodes    Episode[] // Implicit many-to-many
   characters  Character[] // Implicit many-to-many 
 
@@ -75,8 +71,6 @@ model Quote {
   character   Character @relation(fields: [characterId], references: [id])
   episodeId   Int
   episode     Episode   @relation(fields: [episodeId], references: [id])
-  seasonId    Int
-  season      Season    @relation(fields: [seasonId], references: [id])
 
   @@unique([text, characterId, episodeId]) // prevents same quote by same person in same episode
 }

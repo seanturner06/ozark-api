@@ -18,8 +18,9 @@ type Episode {
   imdbRating: Float
   viewerRating: Float
   description: String
-  seasonId: Int!
-  airDate: String
+  seasonId: ID!
+  hasDeaths: Boolean!
+  airDate: DateTime!
   characters: [Character!]!
   crimes: [Crime!]!
   season: Season!
@@ -29,13 +30,10 @@ type Episode {
 type Season {
   id: ID!
   seasonNumber: Int!
-  imdbRating: Float
-  viewerRating: Float
-  airDate: DateTime
+  imdbRating: Float!
+  viewerRating: Float!
+  airDate: DateTime!
   episodes: [Episode!]!
-  characters: [Character!]!
-  crimes: [Crime!]!
-  quotes: [Quote!]!
 }
 
 type Character {
@@ -43,8 +41,7 @@ type Character {
   name: String!
   description: String
   imageUrl: String
-  episodes: [Episode!]!
-  seasons: [Season!]!
+  appearances: [Episode!]!
   crimes: [Crime!]!
   quotes: [Quote!]!
 }
@@ -55,8 +52,7 @@ type Crime {
   victim: String!
   description: String!
   severity: String!
-  episodes: [Episode!]!
-  seasons: [Season!]!
+  appearances: [Episode!]!
   characters: [Character!]!
   quotes: [Quote!]!
 }
@@ -64,17 +60,16 @@ type Crime {
 type Quote {
   id: ID!
   text: String!
-  characterId: Int!
-  episodeId: Int!
-  seasonId: Int!
+  characterId: ID!
+  episodeId: ID!
   character: Character!
   episode: Episode!
-  season: Season!
 }
 
 input EpisodeFilter {
-  seasonNumber: Int
-  episodeNumber: Int
+  id: ID
+  seasonId: ID
+  episodeIds: [ID!]
   hasDeaths: Boolean
   imdbRating: Float
   viewerRating: Float
@@ -82,7 +77,7 @@ input EpisodeFilter {
 }
 
 input SeasonFilter {
-  seasonNumber: Int
+  id: ID
   imdbRating: Float
   viewerRating: Float
   airDate: DateTime
@@ -91,25 +86,25 @@ input SeasonFilter {
 input CharacterFilter {
   name: String
   hasCrimes: Boolean
-  seasonAppearances: [Int!]
-  episodeAppearances: [Int!]
-  quotes: [String!]
+  episodeIds: [ID!]
+  seasonIds: [ID!]
+  hasQuotes: Boolean
+  hasDeaths: Boolean
 }
 
 input CrimeFilter {
-  type: String
-  victim: String
-  severity: String
-  episodeAppearances: [Int!]
-  seasonAppearances: [Int!]
+  type: [String!]
+  victim: [String!]
+  severity: [String!]
+  seasonIds: [ID!]
+  episodeIds: [ID!]
 }
 
 input QuoteFilter {
-  characterId: Int
-  episodeId: Int
-  seasonId: Int
+  episodeIds: [ID!]
+  seasonIds: [ID!]
+  characterNames: [String!]
   textContains: String
-  hasCharacter: Boolean
-  hasEpisode: Boolean
-  hasSeason: Boolean
 }
+
+scalar DateTime
