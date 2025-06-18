@@ -73,7 +73,6 @@ input EpisodeFilter {
   hasDeaths: Boolean
   imdbRating: Float
   viewerRating: Float
-  characterAppearances: [String!]
 }
 
 input SeasonFilter {
