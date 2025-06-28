@@ -4,7 +4,7 @@
   "description": "GraphQL API for TV show data using Apollo Server, Prisma, and PostgreSQL",
   "main": ".dist/index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon src/server.ts",
     "build": "tsc",
     "start": "node .dist/index.js",
     "db:migrate": "prisma migrate",
@@ -18,8 +18,7 @@
     "@apollo/server": "^4.12.2",
     "@prisma/client": "^6.10.1",
     "express": "^4.21.2",
-    "graphql": "^16.11.0",
-    "prisma": "^6.10.1"
+    "graphql": "^16.11.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.7",
@@ -29,6 +28,7 @@
     "@types/graphql": "^14.2.3",
     "@types/node": "^24.0.0",
     "nodemon": "^3.1.10",
+    "prisma": "^6.10.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },

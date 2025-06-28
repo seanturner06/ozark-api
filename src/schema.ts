@@ -1,4 +1,4 @@
-type Query {
+const typeDefs = `type Query {
   episodes(filter: EpisodeFilter): [Episode!]!
   episode(id: ID!): Episode
   characters(filter: CharacterFilter): [Character!]!
@@ -105,3 +105,6 @@ input QuoteFilter {
   characterNames: [String!]
   textContains: String
 }
+`;
+
+export default typeDefs;

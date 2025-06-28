@@ -70,6 +70,20 @@ const resolvers: Resolvers ={
             }
             return context.prisma.character.findMany({ where });
         },
+        crimes: async (_parent, args, context) => {
+            const where: Prisma.CrimeWhereInput = {};
+
+            if (args.filter) {
+                if(args.filter.type && args.filter.type.length > 0) {
+                    where.type = { in: args.filter.type };
+                }
+                if(args.filter.victim && args.filter.victim.length > 0) {
+                    where.victim = { in: args.filter.victim };
+                }
+                
+            }
+            return context.prisma.crime.findMany({ where });
+        },
     }
 }
 
