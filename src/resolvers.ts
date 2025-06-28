@@ -26,6 +26,25 @@ const resolvers: Resolvers ={
             }
             return context.prisma.episode.findMany({ where });
         }, 
+        seasons: async (_parent, args, context) => {
+            const where: Prisma.SeasonWhereInput = {};
+
+            if (args.filter) {
+                if (args.filter.id) {
+                    where.id = Number(args.filter.id);
+                }
+                if (args.filter.seasonIds && args.filter.seasonIds.length > 0) {
+                    where.id = { in: args.filter.seasonIds.map(id => Number(id)) };
+                }
+                if(args.filter.imdbRating !== undefined) {
+                    where.imdbRating = args.filter.imdbRating;
+                }
+                if(args.filter.viewerRating !== undefined) {
+                    where.viewerRating = args.filter.viewerRating;
+                }
+            }
+            return context.prisma.season.findMany({ where });
+        },
     }
 }
 
