@@ -20,7 +20,7 @@ type Episode {
   description: String
   seasonId: ID!
   hasDeaths: Boolean!
-  airDate: DateTime!
+  # airDate: DateTime!
   characters: [Character!]!
   crimes: [Crime!]!
   season: Season!
@@ -32,7 +32,7 @@ type Season {
   seasonNumber: Int!
   imdbRating: Float!
   viewerRating: Float!
-  airDate: DateTime!
+  # airDate: DateTime!
   episodes: [Episode!]!
 }
 
@@ -79,7 +79,7 @@ input SeasonFilter {
   id: ID
   imdbRating: Float
   viewerRating: Float
-  airDate: DateTime
+  # airDate: DateTime
 }
 
 input CharacterFilter {
@@ -105,5 +105,3 @@ input QuoteFilter {
   characterNames: [String!]
   textContains: String
 }
-
-scalar DateTime

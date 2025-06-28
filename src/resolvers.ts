@@ -1,47 +1,31 @@
-import { PrismaClient } from '@prisma/client';
+import { Resolvers } from './generated/graphql';
+import { Prisma } from './generated/prisma';
 
-// 1. Context type
-interface Context {
-    prisma: PrismaClient;
-    user?: {
-    id: string;
-    name: string;
-    };
-}
-// 2. Filter types
-interface EpisodeFilter {
-    id?: string;
-    seasonId?: string;
-    episodeIds?: string[];
-    hasDeaths?: boolean;
-    imdbRating?: number;
-    viewerRating?: number;
-}
 
-const resolvers ={
+const resolvers: Resolvers ={
     Query: {
-        episodes: async (_: any, { filter }: { filter: EpisodeFilter }, context: Context) => {
-            const where: any = {};
+        episodes: async (_parent, args, context) => {
+            const where: Prisma.EpisodeWhereInput = {};
             
-            if (filter) {
-                if (filter.seasonId) {
-                    where.seasonId = filter.seasonId;
+            if (args.filter) {
+                if (args.filter.seasonId) {
+                    where.seasonId = Number(args.filter.seasonId);
                 }
-                if (filter.episodeIds && filter.episodeIds.length > 0) {
-                    where.id = { in: filter.episodeIds };
+                if (args.filter.episodeIds && args.filter.episodeIds.length > 0) {
+                    where.id = { in: args.filter.episodeIds.map(id => Number(id)) };
                 }
-                if (filter.hasDeaths !== undefined) {
-                    where.hasDeaths = filter.hasDeaths;
+                if (args.filter.hasDeaths !== undefined && args.filter.hasDeaths !== null) {
+                    where.hasDeaths = args.filter.hasDeaths;
                 }
-                if (filter.imdbRating !== undefined) {
-                    where.imdbRating = filter.imdbRating;
+                if (args.filter.imdbRating !== undefined) {
+                    where.imdbRating = args.filter.imdbRating;
                 }
-                if (filter.viewerRating !== undefined) {
-                    where.viewerRating = filter.viewerRating;
+                if (args.filter.viewerRating !== undefined) {
+                    where.viewerRating = args.filter.viewerRating;
                 }
             }
             return context.prisma.episode.findMany({ where });
-        }
+        }, 
     }
 }
 
