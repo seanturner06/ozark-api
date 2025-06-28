@@ -84,12 +84,11 @@ input SeasonFilter {
 }
 
 input CharacterFilter {
-  name: String
+  id: ID
   hasCrimes: Boolean
   episodeIds: [ID!]
   seasonIds: [ID!]
   hasQuotes: Boolean
-  hasDeaths: Boolean
 }
 
 input CrimeFilter {

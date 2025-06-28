@@ -31,9 +31,8 @@ export type Character = {
 export type CharacterFilter = {
   episodeIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   hasCrimes?: InputMaybe<Scalars['Boolean']['input']>;
-  hasDeaths?: InputMaybe<Scalars['Boolean']['input']>;
   hasQuotes?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   seasonIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 

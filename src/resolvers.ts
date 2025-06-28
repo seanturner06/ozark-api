@@ -45,6 +45,31 @@ const resolvers: Resolvers ={
             }
             return context.prisma.season.findMany({ where });
         },
+        characters: async (_parent, args, context) => {
+            const where: Prisma.CharacterWhereInput = {};
+
+            if (args.filter) {
+                if (args.filter.id) {
+                    where.id = Number(args.filter.id);
+                }
+                if (args.filter.hasCrimes !== undefined) {
+                    if (args.filter.hasCrimes) {
+                        where.crimes = { some: {} };
+                    } else {
+                        where.crimes = { none: {} };
+                    }
+                }
+                // TODO: Add filtering for episodes and seasons 
+                if(args.filter.hasQuotes !== undefined) {
+                    if(args.filter.hasQuotes) {
+                        where.quotes = { some: {} };
+                    } else {
+                        where.quotes = { none: {} };
+                    }
+                }
+            }
+            return context.prisma.character.findMany({ where });
+        },
     }
 }
 
