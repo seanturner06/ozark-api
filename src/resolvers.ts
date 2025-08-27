@@ -113,6 +113,13 @@ const resolvers: Resolvers ={
                 where: {seasonId: parent.id}
             })
         }
+    }, 
+    Character: {
+        appearances: async(parent, _args, context) => {
+            return context.prisma.episode.findMany({
+                where: {episodes: {some: {id: parent.id }}}
+            })
+        }
     }
 }
 
