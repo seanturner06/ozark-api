@@ -136,9 +136,14 @@ const resolvers: Resolvers ={
             return context.prisma.character.findUnique({
                 where: {id: parent.characterId}
             })
+        },
+        episode: async(parent, _args, context) => {
+            return context.prisma.episode.findUnique({
+                where: {id: parent.episodeId}
+            })
         }
     },
-    
+
 }
 
 export default resolvers;
