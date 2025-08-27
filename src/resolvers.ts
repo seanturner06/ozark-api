@@ -1,7 +1,7 @@
 import { Resolvers } from './generated/graphql';
 import { Prisma } from './generated/prisma';
 
-
+TODO: ADD OPTIMIZATION VIA DATALOADER OR INCLUDE 
 const resolvers: Resolvers ={
     Query: {
         episodes: async (_parent, args, context) => {
@@ -104,6 +104,13 @@ const resolvers: Resolvers ={
         quotes: async(parent, _args, context) => {
             return context.prisma.quotes.findMany({
                 where: {episodes:{some: {id: parent.id}}}
+            })
+        }
+    }, 
+    Season: {
+        episodes: async(parent, _args, context) => {
+            return context.prisma.episodes.findMany({
+                where: {seasonId: parent.id}
             })
         }
     }
