@@ -130,8 +130,15 @@ const resolvers: Resolvers ={
                 where: {characters: {some: {id: parent.id}}}
             })
         }
-
-    }
+    },
+    Quote: {
+        character: async(parent, _args, context) => {
+            return context.prisma.character.findUnique({
+                where: {id: parent.characterId}
+            })
+        }
+    },
+    
 }
 
 export default resolvers;
