@@ -157,3 +157,8 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+characters.ts
+crimes.ts
+quotes.ts
+seasons.ts
