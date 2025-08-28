@@ -4,16 +4,16 @@ import quotes from './quotes';
 import seasons from './seasons';    
 import episodes from './episodes';
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../src/generated/prisma';
 
 const prisma = new PrismaClient();
 
 
 async function addCharacters() {
-    await prisma.character.createMany({
-        data: characters,
-        skipDuplicates: true
-    });
+    console.log("Adding characters");
+    await prisma.character.createMany(
+        { data: characters }
+    );
 }
 
 async function addCrimes() {
@@ -52,13 +52,16 @@ async function addData(){
         addSeasons(),
         addEpisodes()
     ]);
+    console.log("Seed data added");
 }
 
-addData().then(async() => {
-    await prisma.$disconnect();
-})
-.catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-});
+addData()
+    .then(async() => {
+        await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+        console.log("Error seeding data");
+        console.error(e);
+        await prisma.$disconnect();
+        process.exit(1);
+    });

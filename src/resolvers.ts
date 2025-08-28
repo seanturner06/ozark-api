@@ -2,7 +2,7 @@ import { Resolvers } from './generated/graphql';
 import { Prisma } from './generated/prisma';
 
 // TODO: ADD OPTIMIZATION VIA DATALOADER OR INCLUDE 
-const resolvers: Resolvers ={
+const resolvers: Resolvers = {
     Query: {
         episodes: async (_parent, args, context) => {
             const where: Prisma.EpisodeWhereInput = {};
