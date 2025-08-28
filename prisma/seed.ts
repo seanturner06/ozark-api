@@ -51,7 +51,14 @@ async function addData(){
         addQuotes(),
         addSeasons(),
         addEpisodes()
-    ]); 
+    ]);
 }
 
-// TODO: Add error handling when calling addData function
+addData().then(async() => {
+    await prisma.$disconnect();
+})
+.catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+});
