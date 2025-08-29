@@ -17,16 +17,14 @@ async function addCharacters() {
 }
 
 async function addCrimes() {
-    await prisma.crime.createMany({
-        data: crimes,
-        skipDuplicates: true
-    });
+    await prisma.crime.createMany(
+        { data: crimes }
+    );
 }
 
 async function addQuotes() {
     await prisma.quote.createMany({
-        data: quotes,
-        skipDuplicates: true
+        data: quotes
     });
 }
 
