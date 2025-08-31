@@ -1,56 +1,50 @@
-import characters from './characters';
-import crimes  from './crimes';
-import quotes from './quotes';
-import seasons from './seasons';    
-import episodes from './episodes';
+import seasonOneData from './seasonOneData' 
 
 import { PrismaClient } from '../src/generated/prisma';
 
 const prisma = new PrismaClient();
 
 
-async function addCharacters() {
-    console.log("Adding characters");
-    await prisma.character.createMany(
-        { data: characters }
-    );
-}
-
-async function addCrimes() {
-    await prisma.crime.createMany(
-        { data: crimes }
-    );
-}
-
-async function addQuotes() {
-    await prisma.quote.createMany({
-        data: quotes
-    });
-}
-
-async function addSeasons() {
-    await prisma.season.createMany({
-        data: seasons,
-        skipDuplicates: true
-    });
-}
-
-async function addEpisodes() {
-    await prisma.episode.createMany({
-        data: episodes,
-        skipDuplicates: true
-    });
-}
 
 async function addData(){
-    await Promise.all([
-        addCharacters(), 
-        addCrimes(),
-        addQuotes(),
-        addSeasons(),
-        addEpisodes()
-    ]);
+    // Create Season
+    await prisma.season.create({
+        data: seasonOneData.season
+    }); 
+
+    // Create Characters
+    await prisma.character.createMany({
+        data: seasonOneData.characters, 
+        skipDuplicates: true
+    }); 
+
+    // Create Crimes
+    await prisma.crime.createMany({
+        data: seasonOneData.crimes
+    }); 
     console.log("Seed data added");
+
+    // Create Episodes with relationships
+    for(const episodeData of seasonOneData.episodes){
+        const {characterIds, crimeIds, ...episode} = episodeData;
+        await prisma.episode.create({
+            data: {
+                ...episode, 
+                // Connect character that appear in this episode
+                characters: {
+                    connect: characterIds.map(id => ({id}))
+                },
+                // Connect crimes that occur in this episode
+                crimes: {
+                    connect: crimeIds.map(id => ({id}))
+                }
+            }
+        }); 
+    }
+    // Create Quotes 
+    await prisma.quote.createMany({
+        data: seasonOneData.quotes
+    }); 
 }
 
 addData()
