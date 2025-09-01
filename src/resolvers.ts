@@ -97,19 +97,19 @@ const resolvers: Resolvers = {
             })
         },
         crimes: async(parent, _args, context) => {
-            return context.prisma.crimes.findMany({
+            return context.prisma.crime.findMany({
                 where: {episodes: {some: {id: parent.id}}}
             })
         },
         quotes: async(parent, _args, context) => {
-            return context.prisma.quotes.findMany({
+            return context.prisma.quote.findMany({
                 where: {episodes:{some: {id: parent.id}}}
             })
         }
     }, 
     Season: {
         episodes: async(parent, _args, context) => {
-            return context.prisma.episodes.findMany({
+            return context.prisma.episode.findMany({
                 where: {seasonId: parent.id}
             })
         }
