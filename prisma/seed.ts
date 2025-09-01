@@ -22,17 +22,6 @@ try {
     });
     console.log(`✅ Season created with ID: ${season.id}`);
 
-    // 2. Create Characters (get auto-generated IDs)
-    console.log('👥 Creating characters...');
-    const characters: Array<{ id: number; name: string }> = [];
-    for (const characterData of seasonOneData.characters) {
-        const character = await prisma.character.create({
-        data: characterData
-    });
-        characters.push(character);
-        console.log(`  ✅ Character "${character.name}" created with ID: ${character.id}`);
-    }
-
     // 3. Create Crimes (get auto-generated IDs) 
     console.log('🚔 Creating crimes...');
     const crimes: Array<{ id: number; type: string }> = [];
@@ -44,11 +33,31 @@ try {
         console.log(`  ✅ Crime "${crime.type}" created with ID: ${crime.id}`);
     }
 
+    // 2. Create Characters (get auto-generated IDs)
+    console.log('👥 Creating characters...');
+    const characters: Array<{ id: number; name: string }> = [];
+    for (const characterData of seasonOneData.characters) {
+        const {crimeIds, ...character} = characterData
+
+        const createdCharacter = await prisma.character.create({
+            data: {
+                ...character,
+                crimes: {
+                    connect: crimeIds.map((_, index)=> ({ 
+                        id: crimes[index].id
+                    }))
+                }
+            }
+        });
+        characters.push(createdCharacter);
+        console.log(`  ✅ Character "${createdCharacter.name}" created with ID: ${createdCharacter.id}`);
+    } 
+
     // 4. Create Episodes with relationships
     console.log('🎬 Creating episodes...');
     const episodes = [];
     for (const episodeData of seasonOneData.episodes) {
-        const { characterIds, crimeIds, seasonId, ...episode } = episodeData;
+        const { characterIds, seasonId, crimeIds, ...episode } = episodeData;
     
         const createdEpisode = await prisma.episode.create({
             data: {
@@ -58,10 +67,10 @@ try {
                     connect: characterIds.map((_, index) => ({ 
                         id: characters[index].id // Map to actual character IDs
                     }))
-                },
+                }, 
                 crimes: {
-                    connect: crimeIds.map((_, index) => ({ 
-                        id: crimes[index].id // Map to actual crime IDs
+                    connect: crimeIds.map((_, index) => ({
+                        id: crimes[index].id
                     }))
                 }
             }

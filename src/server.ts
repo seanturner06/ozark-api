@@ -12,7 +12,7 @@ type MyContext = {
 
 const server = new ApolloServer<MyContext>({
     typeDefs,
-    resolvers,
+    resolvers
 });
 
 (async () => {
