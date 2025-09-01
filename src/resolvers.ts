@@ -70,6 +70,13 @@ const resolvers: Resolvers = {
             }
             return context.prisma.character.findMany({ where });
         },
+        character: async(_parent, args, context) => {
+            return context.prisma.character.findUnique({
+                where: {
+                    id: Number(args.id)
+                }
+            })
+        },
         crimes: async (_parent, args, context) => {
             const where: Prisma.CrimeWhereInput = {};
 

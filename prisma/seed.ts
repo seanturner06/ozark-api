@@ -73,7 +73,7 @@ try {
                         id: crimes[index].id
                     }))
                 }
-            }
+            } as any
         });
     
         episodes.push(createdEpisode);
