@@ -173,7 +173,6 @@ export type SeasonFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
   imdbRating?: InputMaybe<Scalars['Float']['input']>;
   seasonIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-  viewerRating?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
