@@ -20,9 +20,6 @@ const resolvers: Resolvers = {
                 if (args.filter.imdbRating !== undefined) {
                     where.imdbRating = args.filter.imdbRating;
                 }
-                if (args.filter.viewerRating !== undefined) {
-                    where.viewerRating = args.filter.viewerRating;
-                }
             }
             return context.prisma.episode.findMany({ where });
         }, 
@@ -38,9 +35,6 @@ const resolvers: Resolvers = {
                 }
                 if(args.filter.imdbRating !== undefined) {
                     where.imdbRating = args.filter.imdbRating;
-                }
-                if(args.filter.viewerRating !== undefined) {
-                    where.viewerRating = args.filter.viewerRating;
                 }
             }
             return context.prisma.season.findMany({ where });

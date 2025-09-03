@@ -16,11 +16,9 @@ type Episode {
   episodeNumber: Int!
   title: String!
   imdbRating: Float
-  viewerRating: Float
   description: String
   seasonId: ID!
   hasDeaths: Boolean!
-  # airDate: DateTime!
   characters: [Character!]!
   crimes: [Crime!]!
   season: Season!
@@ -31,8 +29,6 @@ type Season {
   id: ID!
   seasonNumber: Int!
   imdbRating: Float!
-  viewerRating: Float!
-  # airDate: DateTime!
   episodes: [Episode!]!
 }
 

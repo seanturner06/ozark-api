@@ -19,16 +19,15 @@ model Episode {
   episodeNumber Int
   title         String
   imdbRating    Float?
-  viewerRating  Float?
   hasDeaths     Boolean
-  description   String?
+  description   String
   seasonId      Int
-  airDate       DateTime
   season        Season      @relation(fields: [seasonId], references: [id])
   crimes        Crime[] // Implicit many-to-many relation with Crime
   characters    Character[] // Implicit many-to-many relation with Character
   quotes        Quote[] // One-to-many relation with Quote
 
+  // Prevents duplicate episodes in the same season
   @@unique([seasonId, episodeNumber])
 }
 
@@ -36,7 +35,6 @@ model Season {
   id           Int       @id @default(autoincrement())
   seasonNumber Int       @unique
   imdbRating   Float?
-  viewerRating Float?
   airDate      DateTime
   episodes     Episode[] // One-to-many relation with Episode
 }
@@ -47,7 +45,6 @@ model Character {
   description String?
   imageUrl    String?
   quotes      Quote[] // One-to-many relation with Quote
-  // Possibly will explicitly add a relation later
   crimes      Crime[] // Implicit many-to-many
   episodes    Episode[] // Implicit many-to-many
 }

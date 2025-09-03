@@ -69,7 +69,6 @@ export type Episode = {
   season: Season;
   seasonId: Scalars['ID']['output'];
   title: Scalars['String']['output'];
-  viewerRating?: Maybe<Scalars['Float']['output']>;
 };
 
 export type EpisodeFilter = {
@@ -168,7 +167,6 @@ export type Season = {
   id: Scalars['ID']['output'];
   imdbRating: Scalars['Float']['output'];
   seasonNumber: Scalars['Int']['output'];
-  viewerRating: Scalars['Float']['output'];
 };
 
 export type SeasonFilter = {
@@ -322,7 +320,6 @@ export type EpisodeResolvers<ContextType = any, ParentType extends ResolversPare
   season?: Resolver<ResolversTypes['Season'], ParentType, ContextType>;
   seasonId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  viewerRating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -354,7 +351,6 @@ export type SeasonResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   imdbRating?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   seasonNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  viewerRating?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

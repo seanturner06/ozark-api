@@ -1,20 +1,25 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "Episode" (
+    "id" SERIAL NOT NULL,
+    "episodeNumber" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
+    "imdbRating" DOUBLE PRECISION,
+    "hasDeaths" BOOLEAN NOT NULL,
+    "description" TEXT NOT NULL,
+    "seasonId" INTEGER NOT NULL,
 
-  - You are about to drop the column `viewerRatnig` on the `Episode` table. All the data in the column will be lost.
-  - You are about to drop the column `imbdRating` on the `Season` table. All the data in the column will be lost.
-  - A unique constraint covering the columns `[seasonNumber]` on the table `Season` will be added. If there are existing duplicate values, this will fail.
-  - Added the required column `airDate` to the `Season` table without a default value. This is not possible if the table is not empty.
+    CONSTRAINT "Episode_pkey" PRIMARY KEY ("id")
+);
 
-*/
--- AlterTable
-ALTER TABLE "Episode" DROP COLUMN "viewerRatnig",
-ADD COLUMN     "viewerRating" DOUBLE PRECISION;
+-- CreateTable
+CREATE TABLE "Season" (
+    "id" SERIAL NOT NULL,
+    "seasonNumber" INTEGER NOT NULL,
+    "imdbRating" DOUBLE PRECISION,
+    "airDate" TIMESTAMP(3) NOT NULL,
 
--- AlterTable
-ALTER TABLE "Season" DROP COLUMN "imbdRating",
-ADD COLUMN     "airDate" TIMESTAMP(3) NOT NULL,
-ADD COLUMN     "imdbRating" DOUBLE PRECISION;
+    CONSTRAINT "Season_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Character" (
@@ -43,17 +48,8 @@ CREATE TABLE "Quote" (
     "text" TEXT NOT NULL,
     "characterId" INTEGER NOT NULL,
     "episodeId" INTEGER NOT NULL,
-    "seasonId" INTEGER NOT NULL,
 
     CONSTRAINT "Quote_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "_CharacterToSeason" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
-
-    CONSTRAINT "_CharacterToSeason_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateTable
@@ -73,20 +69,18 @@ CREATE TABLE "_CharacterToEpisode" (
 );
 
 -- CreateTable
-CREATE TABLE "_CrimeToSeason" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
-
-    CONSTRAINT "_CrimeToSeason_AB_pkey" PRIMARY KEY ("A","B")
-);
-
--- CreateTable
 CREATE TABLE "_CrimeToEpisode" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
 
     CONSTRAINT "_CrimeToEpisode_AB_pkey" PRIMARY KEY ("A","B")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Episode_seasonId_episodeNumber_key" ON "Episode"("seasonId", "episodeNumber");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Season_seasonNumber_key" ON "Season"("seasonNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Character_name_key" ON "Character"("name");
@@ -98,37 +92,22 @@ CREATE UNIQUE INDEX "Crime_type_victim_key" ON "Crime"("type", "victim");
 CREATE UNIQUE INDEX "Quote_text_characterId_episodeId_key" ON "Quote"("text", "characterId", "episodeId");
 
 -- CreateIndex
-CREATE INDEX "_CharacterToSeason_B_index" ON "_CharacterToSeason"("B");
-
--- CreateIndex
 CREATE INDEX "_CharacterToCrime_B_index" ON "_CharacterToCrime"("B");
 
 -- CreateIndex
 CREATE INDEX "_CharacterToEpisode_B_index" ON "_CharacterToEpisode"("B");
 
 -- CreateIndex
-CREATE INDEX "_CrimeToSeason_B_index" ON "_CrimeToSeason"("B");
-
--- CreateIndex
 CREATE INDEX "_CrimeToEpisode_B_index" ON "_CrimeToEpisode"("B");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Season_seasonNumber_key" ON "Season"("seasonNumber");
+-- AddForeignKey
+ALTER TABLE "Episode" ADD CONSTRAINT "Episode_seasonId_fkey" FOREIGN KEY ("seasonId") REFERENCES "Season"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Quote" ADD CONSTRAINT "Quote_characterId_fkey" FOREIGN KEY ("characterId") REFERENCES "Character"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Quote" ADD CONSTRAINT "Quote_episodeId_fkey" FOREIGN KEY ("episodeId") REFERENCES "Episode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Quote" ADD CONSTRAINT "Quote_seasonId_fkey" FOREIGN KEY ("seasonId") REFERENCES "Season"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CharacterToSeason" ADD CONSTRAINT "_CharacterToSeason_A_fkey" FOREIGN KEY ("A") REFERENCES "Character"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CharacterToSeason" ADD CONSTRAINT "_CharacterToSeason_B_fkey" FOREIGN KEY ("B") REFERENCES "Season"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CharacterToCrime" ADD CONSTRAINT "_CharacterToCrime_A_fkey" FOREIGN KEY ("A") REFERENCES "Character"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -141,12 +120,6 @@ ALTER TABLE "_CharacterToEpisode" ADD CONSTRAINT "_CharacterToEpisode_A_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "_CharacterToEpisode" ADD CONSTRAINT "_CharacterToEpisode_B_fkey" FOREIGN KEY ("B") REFERENCES "Episode"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CrimeToSeason" ADD CONSTRAINT "_CrimeToSeason_A_fkey" FOREIGN KEY ("A") REFERENCES "Crime"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_CrimeToSeason" ADD CONSTRAINT "_CrimeToSeason_B_fkey" FOREIGN KEY ("B") REFERENCES "Season"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CrimeToEpisode" ADD CONSTRAINT "_CrimeToEpisode_A_fkey" FOREIGN KEY ("A") REFERENCES "Crime"("id") ON DELETE CASCADE ON UPDATE CASCADE;
