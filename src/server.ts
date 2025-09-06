@@ -4,7 +4,11 @@ import { PrismaClient } from './generated/prisma';
 import typeDefs from './schema';
 import resolvers from './resolvers';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient(
+    {
+        log: ['query']
+    }
+);
 
 type MyContext = {
     prisma: PrismaClient;

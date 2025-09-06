@@ -1,7 +1,6 @@
 import { Resolvers } from './generated/graphql';
 import { Prisma } from './generated/prisma';
 
-// TODO: ADD OPTIMIZATION VIA DATALOADER OR INCLUDE 
 const resolvers: Resolvers = {
     Query: {
         episodes: async (_parent, args, context) => {
@@ -93,19 +92,19 @@ const resolvers: Resolvers = {
             })
         },
         characters: async(parent, _args, context) => {
-            return context.prisma.character.findMany({
-                where: {episodes: {some: {id: parent.id } } }
-            })
+            return context.prisma.episode.findUnique({
+                where: {id: parent.id }
+            }).characters();
         },
         crimes: async(parent, _args, context) => {
-            return context.prisma.crime.findMany({
-                where: {episodes: {some: {id: parent.id}}}
-            })
+            return context.prisma.episode.findUnique({
+                where: {id: parent.id}
+            }).crimes();
         },
         quotes: async(parent, _args, context) => {
-            return context.prisma.quote.findMany({
-                where: {episodes:{some: {id: parent.id}}}
-            })
+            return context.prisma.episode.findUnique({
+                where: {id: parent.id}
+            }).quotes();
         }
     }, 
     Season: {
@@ -117,19 +116,19 @@ const resolvers: Resolvers = {
     }, 
     Character: {
         appearances: async(parent, _args, context) => {
-            return context.prisma.episode.findMany({
-                where: {characters: {some: {id: parent.id }}}
-            })
+            return context.prisma.character.findUnique({
+                where: {id: parent.id }
+            }).episodes(); 
         },
         crimes: async(parent, _args, context) => {
-            return context.prisma.crime.findMany({
-                where: {characters: {some: {id: parent.id}}}
-            })
+            return context.prisma.character.findUnique({
+                where: {id: parent.id}
+            }).crimes();
         }, 
         quotes: async(parent, _args, context) => {
-            return context.prisma.quote.findMany({
-                where: {characters: {some: {id: parent.id}}}
-            })
+            return context.prisma.character.findUnique({
+                where: {id: parent.id}
+            }).quotes();
         }
     },
     Quote: {
@@ -146,14 +145,14 @@ const resolvers: Resolvers = {
     },
     Crime: {
         appearances: async(parent, _args, context) => {
-            return context.prisma.episode.findMany({
-                where: {crimes: {some: {id: parent.id}}}
-            })
+            return context.prisma.crime.findUnique({
+                where: {id: parent.id}
+            }).episodes(); 
         },
         characters: async(parent, _args, context) => {
-            return context.prisma.character.findMany({
-                where: {crimes: {some: {id: parent.id}}}
-            })
+            return context.prisma.crime.findUnique({
+                where: {id: parent.id}
+            }).characters(); 
         }
     }
 
