@@ -51,4 +51,10 @@ export class CharacterService {
         }
         return this.prisma.character.findMany( { where } );
     }
+
+    async getCharacterAppearances(characterId: number) {
+        return this.prisma.character.findUnique({
+            where: { id: characterId }
+        }).episodes();
+    }
 }
