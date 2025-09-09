@@ -1,7 +1,8 @@
 import { Resolvers } from './generated/graphql';
 import { Prisma } from './generated/prisma';
+import { Context } from './context';
 
-const resolvers: Resolvers = {
+const resolvers: Resolvers<Context> = {
     Query: {
         episodes: async (_parent, args, context) => {
             const where: Prisma.EpisodeWhereInput = {};
@@ -39,36 +40,10 @@ const resolvers: Resolvers = {
             return context.prisma.season.findMany({ where });
         },
         characters: async (_parent, args, context) => {
-            const where: Prisma.CharacterWhereInput = {};
-
-            if (args.filter) {
-                if (args.filter.id) {
-                    where.id = Number(args.filter.id);
-                }
-                if (args.filter.hasCrimes !== undefined) {
-                    if (args.filter.hasCrimes) {
-                        where.crimes = { some: {} };
-                    } else {
-                        where.crimes = { none: {} };
-                    }
-                }
-                // TODO: Add filtering for episodes and seasons 
-                if(args.filter.hasQuotes !== undefined) {
-                    if(args.filter.hasQuotes) {
-                        where.quotes = { some: {} };
-                    } else {
-                        where.quotes = { none: {} };
-                    }
-                }
-            }
-            return context.prisma.character.findMany({ where });
+            return context.characterService.getCharacters(args.filter || null);
         },
         character: async(_parent, args, context) => {
-            return context.prisma.character.findUnique({
-                where: {
-                    id: Number(args.id)
-                }
-            })
+            return context.characterService.getCharacter(args.id);
         },
         crimes: async (_parent, args, context) => {
             const where: Prisma.CrimeWhereInput = {};
@@ -87,24 +62,36 @@ const resolvers: Resolvers = {
     },
     Episode: {
         season: async(parent, _args, context) => {
-            return context.prisma.season.findUnique({
+            const result = await context.prisma.season.findUnique({
                 where: {id: parent.seasonId}
             })
+
+            if (!result) {
+                throw new Error(`Season with id ${parent.seasonId} not found`);
+            }
+
+            return result;
         },
         characters: async(parent, _args, context) => {
-            return context.prisma.episode.findUnique({
+            const result = await context.prisma.episode.findUnique({
                 where: {id: parent.id }
             }).characters();
+
+            return result ?? [];
         },
         crimes: async(parent, _args, context) => {
-            return context.prisma.episode.findUnique({
+            const result = await context.prisma.episode.findUnique({
                 where: {id: parent.id}
             }).crimes();
+
+            return result ?? [];
         },
         quotes: async(parent, _args, context) => {
-            return context.prisma.episode.findUnique({
+            const result = await context.prisma.episode.findUnique({
                 where: {id: parent.id}
             }).quotes();
+
+            return result ?? [];
         }
     }, 
     Season: {
@@ -116,43 +103,65 @@ const resolvers: Resolvers = {
     }, 
     Character: {
         appearances: async(parent, _args, context) => {
-            return context.prisma.character.findUnique({
+            const result = await context.prisma.character.findUnique({
                 where: {id: parent.id }
-            }).episodes(); 
+            })?.episodes();
+
+            return result ?? [];
         },
         crimes: async(parent, _args, context) => {
-            return context.prisma.character.findUnique({
+            const result = await context.prisma.character.findUnique({
                 where: {id: parent.id}
-            }).crimes();
+            })?.crimes();
+
+            return result ?? [];
         }, 
         quotes: async(parent, _args, context) => {
-            return context.prisma.character.findUnique({
+            const result = await context.prisma.character.findUnique({
                 where: {id: parent.id}
-            }).quotes();
+            })?.quotes();
+
+            return result ?? [];
         }
     },
     Quote: {
         character: async(parent, _args, context) => {
-            return context.prisma.character.findUnique({
+            const result = await context.prisma.character.findUnique({
                 where: {id: parent.characterId}
-            })
+            });
+
+            if (!result) {
+                throw new Error(`Character with id ${parent.characterId} not found`);
+            }
+
+            return result;
         },
         episode: async(parent, _args, context) => {
-            return context.prisma.episode.findUnique({
+            const result = await context.prisma.episode.findUnique({
                 where: {id: parent.episodeId}
-            })
+            });
+
+            if (!result) {
+                throw new Error(`Episode with id ${parent.episodeId} not found`);
+            }
+
+            return result;
         }
     },
     Crime: {
         appearances: async(parent, _args, context) => {
-            return context.prisma.crime.findUnique({
+            const result = await context.prisma.crime.findUnique({
                 where: {id: parent.id}
             }).episodes(); 
+
+            return result ?? [];
         },
         characters: async(parent, _args, context) => {
-            return context.prisma.crime.findUnique({
+            const result = await context.prisma.crime.findUnique({
                 where: {id: parent.id}
             }).characters(); 
+
+            return result ?? [];
         }
     }
 

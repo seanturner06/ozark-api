@@ -1,6 +1,6 @@
 import { Context } from './context'
 import { createMockContext, MockContext } from './context'
-import { getAllEpisodes } from './testFunctions'
+import { getAllEpisodes, getAllCharacters } from './testFunctions'
 
 let mockCtx: MockContext
 let ctx: Context
@@ -22,5 +22,20 @@ describe('getAllEpisodes', () => {
         const episodes = await getAllEpisodes(ctx)
 
         expect(episodes).toEqual(mockEpisodes)
+    })
+})
+
+describe('getAllCharacters', () => {
+    test('returns all characters', async() => {
+        const mockCharacters = [
+            {id: 1, name: 'Character1', description: 'description1'},
+            {id: 2, name: 'Character2', description: 'description2'},
+        ]
+
+        mockCtx.prisma.character.findMany.mockResolvedValue(mockCharacters)
+
+        const characters = await getAllCharacters(ctx)
+
+        expect(characters).toEqual(mockCharacters)
     })
 })

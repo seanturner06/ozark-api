@@ -17,9 +17,10 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.12.2",
-    "@prisma/client": "^6.10.1", 
+    "@prisma/client": "^6.10.1",
     "express": "^4.21.2",
-    "graphql": "^16.11.0"
+    "graphql": "^16.11.0",
+    "typedi": "^0.10.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.7",
