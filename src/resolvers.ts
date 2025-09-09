@@ -107,17 +107,11 @@ const resolvers: Resolvers<Context> = {
             return result ?? [];
         },
         crimes: async(parent, _args, context) => {
-            const result = await context.prisma.character.findUnique({
-                where: {id: parent.id}
-            })?.crimes();
-
+            const result = await context.characterService.getCharacterCrimes(parent.id);
             return result ?? [];
         }, 
         quotes: async(parent, _args, context) => {
-            const result = await context.prisma.character.findUnique({
-                where: {id: parent.id}
-            })?.quotes();
-
+            const result = await context.characterService.getCharacterQuotes(parent.id);
             return result ?? [];
         }
     },
