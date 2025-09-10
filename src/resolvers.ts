@@ -5,23 +5,7 @@ import { Context } from './context';
 const resolvers: Resolvers<Context> = {
     Query: {
         episodes: async (_parent, args, context) => {
-            const where: Prisma.EpisodeWhereInput = {};
-            
-            if (args.filter) {
-                if (args.filter.seasonId) {
-                    where.seasonId = Number(args.filter.seasonId);
-                }
-                if (args.filter.episodeIds && args.filter.episodeIds.length > 0) {
-                    where.id = { in: args.filter.episodeIds.map(id => Number(id)) };
-                }
-                if (args.filter.hasDeaths !== undefined && args.filter.hasDeaths !== null) {
-                    where.hasDeaths = args.filter.hasDeaths;
-                }
-                if (args.filter.imdbRating !== undefined) {
-                    where.imdbRating = args.filter.imdbRating;
-                }
-            }
-            return context.prisma.episode.findMany({ where });
+            return context.episodeService.getEpisodes(args.filter || null);
         }, 
         seasons: async (_parent, args, context) => {
             return context.seasonService.getSeasons(args.filter || null);
@@ -52,9 +36,7 @@ const resolvers: Resolvers<Context> = {
     },
     Episode: {
         season: async(parent, _args, context) => {
-            const result = await context.prisma.season.findUnique({
-                where: {id: parent.seasonId}
-            })
+            const result = context.episodeService.getEpisodeSeason(parent.seasonId);
 
             if (!result) {
                 throw new Error(`Season with id ${parent.seasonId} not found`);
@@ -63,23 +45,17 @@ const resolvers: Resolvers<Context> = {
             return result;
         },
         characters: async(parent, _args, context) => {
-            const result = await context.prisma.episode.findUnique({
-                where: {id: parent.id }
-            }).characters();
+            const result = context.episodeService.getEpisodeCharacters(parent.id);
 
             return result ?? [];
         },
         crimes: async(parent, _args, context) => {
-            const result = await context.prisma.episode.findUnique({
-                where: {id: parent.id}
-            }).crimes();
+            const result = context.episodeService.getEpisodeCrimes(parent.id);
 
             return result ?? [];
         },
         quotes: async(parent, _args, context) => {
-            const result = await context.prisma.episode.findUnique({
-                where: {id: parent.id}
-            }).quotes();
+            const result = context.episodeService.getEpisodeQuotes(parent.id);
 
             return result ?? [];
         }
