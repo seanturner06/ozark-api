@@ -7,19 +7,25 @@ const resolvers: Resolvers<Context> = {
         episodes: async (_parent, args, context) => {
             return context.episodeService.getEpisodes(args.filter || null);
         }, 
-        seasons: async (_parent, args, context) => {
+        episode: async(_parent, args, context) => {
+            return context.episodeService.getEpisode(args.id)
+        },
+        seasons: async(_parent, args, context) => {
             return context.seasonService.getSeasons(args.filter || null);
         },
         season: async(_parent, args, context) => {
             return context.seasonService.getSeason(args.id);
         },
-        characters: async (_parent, args, context) => {
+        characters: async(_parent, args, context) => {
             return context.characterService.getCharacters(args.filter || null);
         },
         character: async(_parent, args, context) => {
             return context.characterService.getCharacter(args.id);
         },
-        crimes: async (_parent, args, context) => {
+        quotes: async(_parent, args, context) => {
+            return context.quoteService.getQuotes(args.filter | null);
+        }
+        crimes: async(_parent, args, context) => {
             const where: Prisma.CrimeWhereInput = {};
 
             if (args.filter) {
@@ -33,6 +39,9 @@ const resolvers: Resolvers<Context> = {
             }
             return context.prisma.crime.findMany({ where });
         },
+        crime: async(_parent, args, context) => {
+            return context.crimeService.getCrime(args.id);
+        }
     },
     Episode: {
         season: async(parent, _args, context) => {
@@ -81,9 +90,7 @@ const resolvers: Resolvers<Context> = {
     },
     Quote: {
         character: async(parent, _args, context) => {
-            const result = await context.prisma.character.findUnique({
-                where: {id: parent.characterId}
-            });
+            const result = await context.quoteService.getQuoteCharacter(parent.id);
 
             if (!result) {
                 throw new Error(`Character with id ${parent.characterId} not found`);
