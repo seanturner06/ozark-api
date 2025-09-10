@@ -43,13 +43,13 @@ export class CrimeService {
     }
 
     async getCrimeAppearances(crimeId: number){
-        return this.prisma.episode.findUnique({
+        return this.prisma.crime.findUnique({
             where: {id: crimeId},
         }).episodes();
     }
 
     async getCrimeCharacters(crimeId: number){
-        return this.prisma.character.findUnique({
+        return this.prisma.crime.findUnique({
             where: {id: crimeId},
         }).characters();
     }
