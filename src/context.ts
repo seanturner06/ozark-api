@@ -1,10 +1,13 @@
 import { PrismaClient } from './generated/prisma';
 // import { mockDeep, DeepMockProxy } from 'jest-mock-extended'
 import { CharacterService } from './services/CharacterService'
+import { SeasonService } from './services/SeasonService';
+
 
 export type Context = {
     prisma: PrismaClient; 
     characterService: CharacterService; 
+    seasonService: SeasonService;
 }
 
 // export type MockContext = {
@@ -17,6 +20,7 @@ export const createContext = (): Context => {
     return {
         prisma,
         characterService: new CharacterService(prisma),
+        seasonService: new SeasonService(prisma)
     }
 }
 

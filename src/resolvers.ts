@@ -24,20 +24,10 @@ const resolvers: Resolvers<Context> = {
             return context.prisma.episode.findMany({ where });
         }, 
         seasons: async (_parent, args, context) => {
-            const where: Prisma.SeasonWhereInput = {};
-
-            if (args.filter) {
-                if (args.filter.id) {
-                    where.id = Number(args.filter.id);
-                }
-                if (args.filter.seasonIds && args.filter.seasonIds.length > 0) {
-                    where.id = { in: args.filter.seasonIds.map(id => Number(id)) };
-                }
-                if(args.filter.imdbRating !== undefined) {
-                    where.imdbRating = args.filter.imdbRating;
-                }
-            }
-            return context.prisma.season.findMany({ where });
+            return context.seasonService.getSeasons(args.filter || null);
+        },
+        season: async(_parent, args, context) => {
+            return context.seasonService.getSeason(args.id);
         },
         characters: async (_parent, args, context) => {
             return context.characterService.getCharacters(args.filter || null);
@@ -96,9 +86,7 @@ const resolvers: Resolvers<Context> = {
     }, 
     Season: {
         episodes: async(parent, _args, context) => {
-            return context.prisma.episode.findMany({
-                where: {seasonId: parent.id}
-            })
+            return context.seasonService.getSeasonEpisodes(parent.id);
         }
     }, 
     Character: {
