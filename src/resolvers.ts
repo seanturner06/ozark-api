@@ -1,5 +1,4 @@
 import { Resolvers } from './generated/graphql';
-import { Prisma } from './generated/prisma';
 import { Context } from './context';
 
 const resolvers: Resolvers<Context> = {
@@ -23,21 +22,13 @@ const resolvers: Resolvers<Context> = {
             return context.characterService.getCharacter(args.id);
         },
         quotes: async(_parent, args, context) => {
-            return context.quoteService.getQuotes(args.filter | null);
-        }
+            return context.quoteService.getQuotes(args.filter || {});
+        },
+        quote: async(_parent, args, context) => {
+            return context.quoteService.getQuote(args.id);
+        },
         crimes: async(_parent, args, context) => {
-            const where: Prisma.CrimeWhereInput = {};
-
-            if (args.filter) {
-                if(args.filter.type && args.filter.type.length > 0) {
-                    where.type = { in: args.filter.type };
-                }
-                if(args.filter.victim && args.filter.victim.length > 0) {
-                    where.victim = { in: args.filter.victim };
-                }
-                
-            }
-            return context.prisma.crime.findMany({ where });
+            return context.crimeService.getCrimes(args.filter || {});
         },
         crime: async(_parent, args, context) => {
             return context.crimeService.getCrime(args.id);
@@ -90,7 +81,7 @@ const resolvers: Resolvers<Context> = {
     },
     Quote: {
         character: async(parent, _args, context) => {
-            const result = await context.quoteService.getQuoteCharacter(parent.id);
+            const result = await context.quoteService.getQuoteCharacter(parent.characterId);
 
             if (!result) {
                 throw new Error(`Character with id ${parent.characterId} not found`);
@@ -99,9 +90,7 @@ const resolvers: Resolvers<Context> = {
             return result;
         },
         episode: async(parent, _args, context) => {
-            const result = await context.prisma.episode.findUnique({
-                where: {id: parent.episodeId}
-            });
+            const result = await context.quoteService.getQuoteEpisode(parent.episodeId);
 
             if (!result) {
                 throw new Error(`Episode with id ${parent.episodeId} not found`);
@@ -112,21 +101,16 @@ const resolvers: Resolvers<Context> = {
     },
     Crime: {
         appearances: async(parent, _args, context) => {
-            const result = await context.prisma.crime.findUnique({
-                where: {id: parent.id}
-            }).episodes(); 
+            const result = await context.crimeService.getCrimeAppearances(parent.id);
 
             return result ?? [];
         },
         characters: async(parent, _args, context) => {
-            const result = await context.prisma.crime.findUnique({
-                where: {id: parent.id}
-            }).characters(); 
+            const result = await context.crimeService.getCrimeCharacters(parent.id);
 
             return result ?? [];
         }
     }
-
 }
 
 export default resolvers;
