@@ -4,9 +4,20 @@ import typeDefs from './schema';
 import resolvers from './resolvers';
 import { createContext, Context} from './context';
 
+import { createComplexityRule, fieldExtensionsEstimator, simpleEstimator } from 'graphql-query-complexity';
+
 const server = new ApolloServer<Context>({
     typeDefs,
     resolvers,
+    validationRules: [
+        createComplexityRule({
+            maximumComplexity: 1000,
+            estimators: [
+                fieldExtensionsEstimator(),
+                simpleEstimator({ defaultComplexity: 1 }),
+            ],
+        })
+    ]
 });
 
 (async () => {
