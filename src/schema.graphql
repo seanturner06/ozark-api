@@ -15,8 +15,8 @@ type Episode {
   id: ID!
   episodeNumber: Int!
   title: String!
-  imdbRating: Float
-  description: String
+  imdbRating: Float!
+  description: String!
   seasonId: ID!
   hasDeaths: Boolean!
   characters: [Character!]!
@@ -35,8 +35,8 @@ type Season {
 type Character {
   id: ID!
   name: String!
-  description: String
-  imageUrl: String
+  description: String!
+  imageUrl: String!
   appearances: [Episode!]!
   crimes: [Crime!]!
   quotes: [Quote!]!

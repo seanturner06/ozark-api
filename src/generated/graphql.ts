@@ -21,9 +21,9 @@ export type Character = {
   __typename?: 'Character';
   appearances: Array<Episode>;
   crimes: Array<Crime>;
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  imageUrl?: Maybe<Scalars['String']['output']>;
+  imageUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   quotes: Array<Quote>;
 };
@@ -60,11 +60,11 @@ export type Episode = {
   __typename?: 'Episode';
   characters: Array<Character>;
   crimes: Array<Crime>;
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   episodeNumber: Scalars['Int']['output'];
   hasDeaths: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
-  imdbRating?: Maybe<Scalars['Float']['output']>;
+  imdbRating: Scalars['Float']['output'];
   quotes: Array<Quote>;
   season: Season;
   seasonId: Scalars['ID']['output'];
@@ -287,9 +287,9 @@ export type ResolversParentTypes = {
 export type CharacterResolvers<ContextType = any, ParentType extends ResolversParentTypes['Character'] = ResolversParentTypes['Character']> = {
   appearances?: Resolver<Array<ResolversTypes['Episode']>, ParentType, ContextType>;
   crimes?: Resolver<Array<ResolversTypes['Crime']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  imageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   quotes?: Resolver<Array<ResolversTypes['Quote']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -310,11 +310,11 @@ export type CrimeResolvers<ContextType = any, ParentType extends ResolversParent
 export type EpisodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Episode'] = ResolversParentTypes['Episode']> = {
   characters?: Resolver<Array<ResolversTypes['Character']>, ParentType, ContextType>;
   crimes?: Resolver<Array<ResolversTypes['Crime']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   episodeNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   hasDeaths?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  imdbRating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  imdbRating?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   quotes?: Resolver<Array<ResolversTypes['Quote']>, ParentType, ContextType>;
   season?: Resolver<ResolversTypes['Season'], ParentType, ContextType>;
   seasonId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;

@@ -1,8 +1,11 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import typeDefs from './schema';
 import resolvers from './resolvers';
 import { createContext, Context} from './context';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const typeDefs = readFileSync(join(__dirname, 'schema.graphql'), 'utf-8');
 
 import { createComplexityRule, fieldExtensionsEstimator, simpleEstimator } from 'graphql-query-complexity';
 

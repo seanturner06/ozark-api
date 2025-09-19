@@ -44,8 +44,8 @@ describe('EpisodeService', () => {
     describe('getEpisodes', () => {
         it('should return all episodes when no filter is provided', async () => {
             const mockEpisodes = [
-            { id: 1, title: 'Episode 1' },
-            { id: 2, title: 'Episode 2' }
+                { id: 1, title: 'Episode 1' },
+                { id: 2, title: 'Episode 2' }
             ];
             mockContext.prisma.episode.findMany.mockResolvedValue(mockEpisodes);
 
@@ -73,9 +73,9 @@ describe('EpisodeService', () => {
         it('should filter by episodeIds when provided', async () => {
             const filter: EpisodeFilter = { episodeIds: ['1', '3', '5'] };
             const mockEpisodes = [
-            { id: 1, title: 'Episode 1' },
-            { id: 3, title: 'Episode 3' },
-            { id: 5, title: 'Episode 5' }
+                { id: 1, title: 'Episode 1' },
+                { id: 3, title: 'Episode 3' },
+                { id: 5, title: 'Episode 5' }
             ];
             mockContext.prisma.episode.findMany.mockResolvedValue(mockEpisodes);
 
