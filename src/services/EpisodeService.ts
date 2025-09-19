@@ -23,10 +23,10 @@ export class EpisodeService {
             if (filter.episodeIds && filter.episodeIds.length > 0) {
                 where.id = { in: filter.episodeIds.map(id => Number(id)) };
             }
-            if (filter.hasDeaths !== undefined && filter.hasDeaths !== null) {
+            if (filter.hasDeaths != null) {
                 where.hasDeaths = filter.hasDeaths;
             }
-            if (filter.imdbRating !== undefined) {
+            if (filter.imdbRating != null) {
                 where.imdbRating = filter.imdbRating;
             }
         }

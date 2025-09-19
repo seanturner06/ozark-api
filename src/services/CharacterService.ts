@@ -20,7 +20,7 @@ export class CharacterService {
             if(filter.id){
                 where.id = Number(filter.id);
             }
-            if(filter.hasCrimes !== undefined) {
+            if(filter.hasCrimes != null) {
                 if(filter.hasCrimes) {
                     where.crimes = { some: {} };
                 } else {
@@ -41,7 +41,7 @@ export class CharacterService {
                     }
                 }
             }
-            if(filter.hasQuotes !== undefined) {
+            if(filter.hasQuotes != null) {
                 if(filter.hasQuotes) {
                     where.quotes = { some: {} }; 
                 }else {

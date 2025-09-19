@@ -18,7 +18,7 @@ model Episode {
   id            Int         @id @default(autoincrement())
   episodeNumber Int
   title         String
-  imdbRating    Float?
+  imdbRating    Float
   hasDeaths     Boolean
   description   String
   seasonId      Int
@@ -34,7 +34,7 @@ model Episode {
 model Season {
   id           Int       @id @default(autoincrement())
   seasonNumber Int       @unique
-  imdbRating   Float?
+  imdbRating   Float
   airDate      DateTime
   episodes     Episode[] // One-to-many relation with Episode
 }
@@ -42,7 +42,7 @@ model Season {
 model Character {
   id          Int       @id @default(autoincrement())
   name        String    @unique
-  description String?
+  description String
   imageUrl    String?
   quotes      Quote[] // One-to-many relation with Quote
   crimes      Crime[] // Implicit many-to-many
@@ -53,8 +53,8 @@ model Crime {
   id          Int         @id @default(autoincrement())
   type        String
   victim      String
-  description String?
-  severity    String?
+  description String
+  severity    String
   episodes    Episode[] // Implicit many-to-many
   characters  Character[] // Implicit many-to-many 
 

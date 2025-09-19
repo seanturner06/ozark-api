@@ -23,7 +23,7 @@ export class SeasonService {
             if (filter.seasonIds && filter.seasonIds.length > 0) {
                 where.id = { in: filter.seasonIds.map(id => Number(id)) };
             }
-            if(filter.imdbRating !== undefined) {
+            if(filter.imdbRating != null) {
                 where.imdbRating = filter.imdbRating;
             }
         }
